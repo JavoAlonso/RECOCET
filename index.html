@@ -1,0 +1,386 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <style>
+        #panorama {
+            width: 100%;
+            height: 600px;
+        }
+        
+        .custom-hotspot {
+            height: 50px;
+            width: 50px;
+            background: #f00;
+            border-radius: 100%;
+        }
+        
+        div.custom-tooltip span {
+            visibility: hidden;
+            position: absolute;
+            border-radius: 3px;
+            background-color: #fff;
+            color: #000;
+            text-align: center;
+            max-width: 200px;
+            padding: 5px 10px;
+            margin-left: -220px;
+            cursor: default;
+        }
+        
+        div.custom-tooltip:hover span {
+            visibility: visible;
+        }
+        
+        div.custom-tooltip:hover span:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-width: 10px;
+            border-style: solid;
+            border-color: #fff transparent transparent transparent;
+            bottom: -20px;
+            left: -10px;
+            margin: 0 50%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="panorama"></div>
+    <script>
+        
+        pannellum.viewer('panorama', {
+            "default": {
+                "firstScene": "c_empedrado",
+                //"author": "JAVIER ALONSO",
+                "sceneFadeDuration": 1000,
+                "autoLoad": true,
+                "autoRotate": -10,
+                "strings": {
+                    loadingLabel: 'Cargando...',
+                    genericWebGLError:"Su navegador no tiene el soporte WebGL necesario para mostrar este panorama.",
+                    "fileAccessError": "The file %s could not be accessed!"
+                }
+            },
+            "scenes": {
+                "CET": {
+                    "title": "CENTRO DE ESTUDIOS TEOTIHUACANOS",
+                    "hfov": 110,
+                    "pitch": -3,
+                    "yaw": 117,
+                    "type": "equirectangular",
+                    "panorama": "./cet/01.JPG",
+                    "hotSpots": [{
+                            "pitch": 10,
+                            "yaw": 10,
+                            "type": "scene",
+                            "text": "Acceder",
+                            "sceneId": "salap"
+                        }, { //afuera
+                            "pitch": 10,
+                            "yaw": -40,
+                            "type": "scene",
+                            "text": "Circuito Empedrado",
+                            "sceneId": "c_empedrado"
+                        }, {
+                            "pitch": 30,
+                            "yaw": 10,
+                            "cssClass": "custom-hotspot",
+                            "createTooltipFunc": hotspot,
+                            "createTooltipArgs": "Entrada a CET"
+                        }, {
+                            "yaw": 20,
+                            "pitch": -90,
+                            "type": "info",
+                            "text": "Selecciona la flecha para ejecutar acción",
+                        }
+
+                    ]
+                },
+
+                "salap": {
+                    "title": "PLANTA BAJA",
+                    "hfov": 110,
+                    "yaw": 5,
+                    "type": "equirectangular",
+                    "panorama": "./cet/02.JPG",
+                    "hotSpots": [{
+                            "pitch": 10,
+                            "yaw": 500,
+                            "type": "scene",
+                            "text": "salir",
+                            "sceneId": "CET",
+                            "targetYaw": -23,
+                            "targetPitch": 2
+                        }, { //escaleras
+                            "pitch": 0,
+                            "yaw": 0,
+                            "type": "scene",
+                            "text": "Planta Alta",
+                            "sceneId": "plantab"
+                        }, { //mago
+                            "pitch": 0,
+                            "yaw": -20,
+                            "type": "scene",
+                            "text": "biblioteca",
+                            "sceneId": "boteca"
+                        }, { //auditorio
+                            "pitch": 0,
+                            "yaw": -35,
+                            "type": "scene",
+                            "text": "auditorio",
+                            "sceneId": "auditorio"
+                        }, { //sala02
+                            "pitch": 0,
+                            "yaw": -150,
+                            "type": "scene",
+                            "text": "Sala de Expociciones",
+                            "sceneId": "expocicion"
+                        }
+
+                    ]
+                },
+                "auditorio": {
+                    "title": "AUDITORIO",
+                    "hfov": 110,
+                    "pitch": -3,
+                    "yaw": 117,
+                    "type": "equirectangular",
+                    "panorama": "./cet/03.JPG",
+                    "hotSpots": [{
+                            "pitch": 0,
+                            "yaw": 20,
+                            "type": "scene",
+                            "text": "sala principal",
+                            "sceneId": "salap"
+                        },
+
+                    ]
+                },
+                "expocicion": {
+                    "title": "SALA DE EXPOCICIONES",
+                    "hfov": 110,
+                    "pitch": -3,
+                    "yaw": 117,
+                    "type": "equirectangular",
+                    "panorama": "./cet/04.JPG",
+                    "hotSpots": [{
+                            "pitch": -20,
+                            "yaw": 160,
+                            "type": "scene",
+                            "text": "sala principal",
+                            "sceneId": "salap"
+                        },
+
+                    ]
+                },
+                "boteca": {
+                    "title": "BIBLIOTECA",
+                    "hfov": 110,
+                    "pitch": -3,
+                    "yaw": 117,
+                    "type": "equirectangular",
+                    "panorama": "./cet/05.JPG",
+                    "hotSpots": [{
+                            "pitch": 10,
+                            "yaw": -45,
+                            "type": "scene",
+                            "text": "Fototeca",
+                            "sceneId": "fototeca"
+                        }, {
+                            "pitch": 10,
+                            "yaw": -100,
+                            "type": "scene",
+                            "text": "Sala Principal",
+                            "sceneId": "salap"
+                        },
+
+                    ]
+                },
+                "fototeca": {
+                    "title": "FOTOTECA",
+                    "hfov": 110,
+                    "pitch": -3,
+                    "yaw": 117,
+                    "type": "equirectangular",
+                    "panorama": "./cet/06.JPG",
+                    "hotSpots": [{
+                            "pitch": -20,
+                            "yaw": 95,
+                            "type": "scene",
+                            "text": "Biblioteca",
+                            "sceneId": "boteca"
+                        },
+
+                    ]
+                },
+                "plantab": {
+                    "title": "PLANTA ALTA",
+                    "hfov": 110,
+                    "pitch": -3,
+                    "yaw": 117,
+                    "type": "equirectangular",
+                    "panorama": "./cet/07.JPG",
+                    "hotSpots": [{
+                            "pitch": -40,
+                            "yaw": -155,
+                            "type": "scene",
+                            "text": "Sala Principal",
+                            "sceneId": "salap"
+                        }, {
+                            "pitch": 0,
+                            "yaw": -177,
+                            "type": "scene",
+                            "text": "Sala de Juntas",
+                            "sceneId": "juntas"
+                        },
+
+                    ]
+                },
+                "juntas": {
+                    "title": "SALA DE JUNTAS",
+                    "hfov": 110,
+                    "pitch": -3,
+                    "yaw": 117,
+                    "type": "equirectangular",
+                    "panorama": "./cet/08.JPG",
+                    "hotSpots": [{
+                            "pitch": 0,
+                            "yaw": 93,
+                            "type": "scene",
+                            "text": "Planta Alta",
+                            "sceneId": "plantab"
+                        }, {
+                            "pitch": -20,
+                            "yaw": -100,
+                            "type": "scene",
+                            "text": "Terrasa",
+                            "sceneId": "terrasa"
+                        },
+
+                    ]
+                },
+                "fuera": {
+                    "title": "sala de juntas",
+                    "hfov": 110,
+                    "pitch": -3,
+                    "yaw": 117,
+                    "type": "equirectangular",
+                    "panorama": "./cet/09.JPG",
+                    "hotSpots": [{
+                            "pitch": 0,
+                            "yaw": 20,
+                            "type": "scene",
+                            "text": "sala principal",
+                            "sceneId": "salap"
+                        },
+
+                    ]
+                },
+                "terrasa": {
+                    "title": "",
+                    "hfov": 110,
+                    "pitch": -3,
+                    "yaw": 117,
+                    "type": "equirectangular",
+                    "panorama": "./cet/10.JPG",
+                    "hotSpots": [{
+                        "pitch": 0,
+                        "yaw": -60,
+                        "type": "scene",
+                        "text": "Sala de Juntas",
+                        "sceneId": "juntas"
+                    }, ]
+                },
+                "juridico": {
+                    "title": "JURIDICO",
+                    "hfov": 110,
+                    "pitch": -3,
+                    "yaw": 117,
+                    "autoRotate": 10,
+                    "type": "equirectangular",
+                    "panorama": "./cet/11.jpeg",
+                    "hotSpots": [{
+                            "pitch": 5,
+                            "yaw": 120,
+                            "type": "scene",
+                            "text": "Circuito Empedrado",
+                            "sceneId": "c_empedrado"
+                        }, {
+                            "pitch": 5,
+                            "yaw": 40,
+                            "cssClass": "custom-hotspot",
+                            "createTooltipFunc": hotspot,
+                            "createTooltipArgs": "Area jurídica"
+                        },
+
+                    ]
+                },
+                "bbb": {
+                    "title": "",
+                    "hfov": 110,
+                    "pitch": -3,
+                    "yaw": 117,
+                    "type": "equirectangular",
+                    "panorama": "./cet/12.JPG",
+                    "hotSpots": [{
+                            "pitch": 0,
+                            "yaw": 100,
+                            "type": "scene",
+                            "text": "sala principal",
+                            "sceneId": "salap"
+                        },
+
+                    ]
+                },
+                "c_empedrado": {
+                    "title": "CIRCUITO EMPEDRADO",
+                    "hfov": 110,
+                    "pitch": -3,
+                    "yaw": 117,
+                    "type": "equirectangular",
+                    "panorama": "./cet/13.JPG",
+                    "hotSpots": [{
+                            "pitch": 5,
+                            "yaw": 80,
+                            "type": "scene",
+                            "text": "JURÍDICO",
+                            "sceneId": "juridico"
+                        }, {
+                            "pitch": 5,
+                            "yaw": 90,
+                            "type": "scene",
+                            "text": "CET",
+                            "sceneId": "CET"
+                        }
+
+                    ]
+                }
+
+            },
+        });
+       // Hot spot creation function
+        function hotspot(hotSpotDiv, args) {
+            hotSpotDiv.classList.add('custom-tooltip');
+            var span = document.createElement('span');
+            span.innerHTML = args;
+            hotSpotDiv.appendChild(span);
+            span.style.width = span.scrollWidth - 20 + 'px';
+            span.style.marginLeft = -(span.scrollWidth - hotSpotDiv.offsetWidth) / 2 + 'px';
+            span.style.marginTop = -span.scrollHeight - 12 + 'px';
+        }
+
+        console.log(document.querySelector(".pnlm-load-box").children[0].innerHTML="Cargando Mapa");
+    </script>
+
+</body>
+
+</html>
